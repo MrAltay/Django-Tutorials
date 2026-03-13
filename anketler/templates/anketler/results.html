@@ -1,9 +1,43 @@
-<h1>{{ question.question_text }}</h1>
+{% extends 'anketler/base.html' %}
 
-<ul>
+{% block content %}
+<div class="header-nav">
+    <a href="{% url 'anketler:index' %}" class="back-circle">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+        </svg>
+    </a>
+    <div class="progress-indicator">
+        <div class="progress-text">
+            <span>Sonuçlar</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" style="width: 100%;"></div>
+        </div>
+    </div>
+</div>
+
+<div class="page-header">
+    <h1 style="font-size: 1.5rem;">{{ question.question_text }}</h1>
+</div>
+
+<div class="info-box">
+    <p>Oylar sayıldı. İşte ağdan gelen en son sonuçlar.</p>
+</div>
+
+<ul class="results-list">
 {% for choice in question.choice_set.all %}
-    <li>{{ choice.choice_text }} -- {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>
+    <li class="result-item">
+        <div class="result-progress" style="width: {% widthratio choice.votes question.choice_set.count|default:1 100 %}%"></div>
+        <div class="result-content">
+            <span class="result-name">{{ choice.choice_text }}</span>
+            <span class="result-votes">{{ choice.votes }} oy</span>
+        </div>
+    </li>
 {% endfor %}
 </ul>
 
-<a href="{% url 'anketler:detail' question.id %}">Vote again?</a>
+<div style="margin-top: 2rem; text-align: center;">
+    <a href="{% url 'anketler:detail' question.id %}" class="btn-submit" style="display: inline-block; width: auto; padding: 0.75rem 2rem;">Tekrar Oy Ver</a>
+</div>
+{% endblock %}

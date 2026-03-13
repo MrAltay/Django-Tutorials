@@ -1,12 +1,41 @@
-<form action="{% url 'anketler:vote' question.id %}" method="post">
-{% csrf_token %}
-<fieldset>
-    <legend><h1>{{ question.question_text }}</h1></legend>
-    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-    {% for choice in question.choice_set.all %}
-        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
-        <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
-    {% endfor %}
-</fieldset>
-<input type="submit" value="Vote">
-</form>
+{% extends 'anketler/base.html' %}
+
+{% block content %}
+<div class="header-nav">
+    <a href="{% url 'anketler:index' %}" class="back-circle">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+        </svg>
+    </a>
+    <div class="progress-indicator">
+        <div class="progress-text">
+            <span>Oylama Süreci</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" style="width: 50%;"></div>
+        </div>
+    </div>
+</div>
+
+<div class="vote-form-container">
+    <h2 class="vote-form-title">{{ question.question_text }}</h2>
+    
+    {% if error_message %}
+        <div class="error-message">{{ error_message }}</div>
+    {% endif %}
+
+    <form action="{% url 'anketler:vote' question.id %}" method="post">
+    {% csrf_token %}
+    <fieldset>
+        {% for choice in question.choice_set.all %}
+            <label class="choice-label" for="choice{{ forloop.counter }}">
+                <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+                <div class="radio-custom"></div>
+                <span class="choice-text">{{ choice.choice_text }}</span>
+            </label>
+        {% endfor %}
+    </fieldset>
+    <button type="submit" class="btn-submit">Oy Ver</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,13 +1,43 @@
-{% load static %}
+{% extends 'anketler/base.html' %}
 
-<link rel="stylesheet" href="{% static 'anketler/style.css' %}">
+{% block content %}
+<div class="header-nav">
+    <div class="progress-indicator">
+        <div class="progress-text">
+            <span>Mevcut Anketler</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" style="width: 100%;"></div>
+        </div>
+    </div>
+</div>
+
+<div class="page-header">
+    <h1 class="page-title">Anket Sistemi</h1>
+</div>
+
+<div class="info-box">
+    <p>Oyunuzu kullanmak için aşağıdan bir anket seçin. Sivas'ın geleceği için karar sizin.</p>
+</div>
 
 {% if latest_question_list %}
-    <ul>
+    <div class="card-grid">
     {% for question in latest_question_list %}
-        <li><a href="{% url 'anketler:detail' question.id %}">{{ question.question_text }}</a></li>
+        {% cycle 'card-orange' 'card-red' 'card-green' 'card-blue' 'card-yellow' as card_color silent %}
+        <a href="{% url 'anketler:detail' question.id %}" class="galaxy-card {{ card_color }}">
+            <div class="icon">
+                {% if forloop.counter|divisibleby:4 %}✨
+                {% elif forloop.counter|divisibleby:3 %}🪐
+                {% elif forloop.counter|divisibleby:2 %}🚀
+                {% else %}🎯{% endif %}
+            </div>
+            <span>{{ question.question_text }}</span>
+        </a>
     {% endfor %}
-    </ul>
+    </div>
 {% else %}
-    <p>No anketler are available.</p>
+    <div class="info-box">
+        <p>Şu anda aktif bir anket bulunmamaktadır.</p>
+    </div>
 {% endif %}
+{% endblock %}
