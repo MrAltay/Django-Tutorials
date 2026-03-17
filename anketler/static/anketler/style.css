@@ -17,6 +17,25 @@
     --border-color: #2a2b36;
     --border-radius: 16px;
     --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    --particle-color: rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="light"] {
+    --bg-main: #f8f9fa;
+    --bg-card: #ffffff;
+    --text-primary: #202124;
+    --text-secondary: #5f6368;
+    --border-color: #dadce0;
+    --accent-red-glow: rgba(234, 67, 53, 0.15);
+    --accent-green-glow: rgba(52, 168, 83, 0.15);
+    --accent-blue-glow: rgba(66, 133, 244, 0.15);
+    --accent-yellow-glow: rgba(251, 188, 5, 0.15);
+    --accent-orange-glow: rgba(255, 112, 67, 0.15);
+    --particle-color: rgba(0, 0, 0, 0.05);
+}
+
+body, .anket-card, .info-box, .choice-label, .result-item, .btn-submit, .back-circle, .btn-back {
+    transition: var(--transition), background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
 }
 
 * {
@@ -100,7 +119,7 @@ a {
     }
 }
 
-.galaxy-card {
+.anket-card {
     background-color: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
@@ -117,7 +136,7 @@ a {
     cursor: pointer;
 }
 
-.galaxy-card::before {
+.anket-card::before {
     content: '';
     position: absolute;
     top: 0;
@@ -129,17 +148,17 @@ a {
     transition: var(--transition);
 }
 
-.galaxy-card:hover {
+.anket-card:hover {
     transform: translateY(-2px);
     border-color: var(--accent-color, var(--border-color));
     box-shadow: 0 8px 24px var(--glow-color, rgba(0,0,0,0.2));
 }
 
-.galaxy-card:hover::before {
+.anket-card:hover::before {
     opacity: 0.15;
 }
 
-.galaxy-card span {
+.anket-card span {
     position: relative;
     z-index: 1;
     font-size: 0.95rem;
@@ -147,7 +166,7 @@ a {
     color: var(--accent-color, var(--text-primary));
 }
 
-.galaxy-card .icon {
+.anket-card .icon {
     font-size: 1.5rem;
     margin-bottom: 0.75rem;
     position: relative;
@@ -461,4 +480,47 @@ input[type="radio"]:checked ~ .choice-text {
 .particle-sm { width: 2px; height: 2px; }
 .particle-md { width: 4px; height: 4px; }
 .particle-lg { width: 6px; height: 6px; box-shadow: 0 0 10px rgba(255,255,255,0.2); }
+
+/* Theme Toggle Button */
+.theme-toggle-container {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    z-index: 1000;
+}
+
+.theme-toggle-btn {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: var(--transition);
+}
+
+.theme-toggle-btn:hover {
+    transform: scale(1.1);
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 15px var(--accent-blue-glow);
+}
+
+.theme-toggle-btn .sun { display: none; }
+.theme-toggle-btn .moon { display: block; }
+
+[data-theme="light"] .theme-toggle-btn .sun { display: block; }
+[data-theme="light"] .theme-toggle-btn .moon { display: none; }
+[data-theme="light"] .theme-toggle-btn {
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.1);
+}
+
+.particle {
+    background: var(--particle-color);
+}
 

@@ -4,15 +4,18 @@ Bu proje, standart bir Django Polls uygulamasının modern, karanlık ve neon bi
 
 ## Özellikler
 
-- **Modern Tasarım:** Galaksi/Neon temalı glassmorphic kartlar ve parlayan butonlar.
-- **Sivas İçeriği:** Sivas köftesi, Divriği Ulu Camii ve Kangal köpeği gibi yerel değerleri içeren anketler.
-- **Responsive Arayüz:** Telefon, tablet ve masaüstü cihazlar için tam uyumlu grid yapısı.
-- **Animasyonlu Arkaplan:** Uzay atmosferi için hareketli partikül efektleri.
+- **Modern Tasarım:** Sivas temalı anket kartları ve interaktif UI öğeleri.
+- **Gece/Gündüz Modu:** Kullanıcı tercihine göre değişen ve tercihi hatırlayan tema desteği.
+- **Sivas İçeriği:** Sivas'ın yemekleri, tarihi mekanları ve kültürü üzerine fikir anketleri.
+- **Responsive Arayüz:** Telefon, tablet ve masaüstü cihazlar için tam uyumlu yapı.
+- **Animasyonlu Arkaplan:** Temaya göre renk değiştiren hareketli partikül efektleri.
 - **Progress Bar:** Oylama sonuçları için şık görsel barlar.
 
-## Ekran Görüntüsü
+### Karanlık Mod (Varsayılan)
+![Karanlık Mod](dark-mode.png)
 
-![Uygulama Ekran Görüntüsü](screenshot-last-ver.png)
+### Aydınlık Mod
+![Aydınlık Mod](light-mode.png)
 
 ## Teknolojiler
 

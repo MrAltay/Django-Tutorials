@@ -21,23 +21,23 @@
 </div>
 
 {% if latest_question_list %}
-    <div class="card-grid">
+<div class="card-grid">
     {% for question in latest_question_list %}
-        {% cycle 'card-orange' 'card-red' 'card-green' 'card-blue' 'card-yellow' as card_color silent %}
-        <a href="{% url 'anketler:detail' question.id %}" class="galaxy-card {{ card_color }}">
-            <div class="icon">
-                {% if forloop.counter|divisibleby:4 %}✨
-                {% elif forloop.counter|divisibleby:3 %}🪐
-                {% elif forloop.counter|divisibleby:2 %}🚀
-                {% else %}🎯{% endif %}
-            </div>
-            <span>{{ question.question_text }}</span>
-        </a>
+    {% cycle 'card-orange' 'card-red' 'card-green' 'card-blue' 'card-yellow' as card_color silent %}
+    <a href="{% url 'anketler:detail' question.id %}" class="anket-card {{ card_color }}">
+        <div class="icon">
+            {% if forloop.counter|divisibleby:4 %}🍲
+            {% elif forloop.counter|divisibleby:3 %}🏛️
+            {% elif forloop.counter|divisibleby:2 %}🐕
+            {% else %}🗳️{% endif %}
+        </div>
+        <span>{{ question.question_text }}</span>
+    </a>
     {% endfor %}
-    </div>
+</div>
 {% else %}
-    <div class="info-box">
-        <p>Şu anda aktif bir anket bulunmamaktadır.</p>
-    </div>
+<div class="info-box">
+    <p>Şu anda aktif bir anket bulunmamaktadır.</p>
+</div>
 {% endif %}
 {% endblock %}
