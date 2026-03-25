@@ -5,12 +5,12 @@ from django.db import models
 from django.utils import timezone
 
 
-class Question(models.Model):
-    question_text = models.CharField(max_length=200)
+class Poll(models.Model):
+    title = models.CharField(max_length=200)
     pub_date = models.DateTimeField("date published")
 
     def __str__(self):
-        return self.question_text
+        return self.title
 
     @admin.display(
         boolean=True,
@@ -20,6 +20,14 @@ class Question(models.Model):
     def was_published_recently(self):
         now = timezone.now()
         return now - datetime.timedelta(days=1) <= self.pub_date <= now
+
+
+class Question(models.Model):
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
+    question_text = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.question_text
 
 
 class Choice(models.Model):

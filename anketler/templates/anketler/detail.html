@@ -18,23 +18,30 @@
 </div>
 
 <div class="vote-form-container">
-    <h2 class="vote-form-title">{{ question.question_text }}</h2>
+    <h1 class="page-title" style="margin-bottom: 2rem; font-size: 1.5rem;">{{ poll.title }}</h1>
     
     {% if error_message %}
         <div class="error-message">{{ error_message }}</div>
     {% endif %}
 
-    <form action="{% url 'anketler:vote' question.id %}" method="post">
+    <form action="{% url 'anketler:vote' poll.id %}" method="post">
     {% csrf_token %}
-    <fieldset>
-        {% for choice in question.choice_set.all %}
-            <label class="choice-label" for="choice{{ forloop.counter }}">
-                <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
-                <div class="radio-custom"></div>
-                <span class="choice-text">{{ choice.choice_text }}</span>
-            </label>
-        {% endfor %}
-    </fieldset>
+    
+    {% for question in poll.question_set.all %}
+    <div style="margin-bottom: 2rem;">
+        <h2 class="vote-form-title">{{ question.question_text }}</h2>
+        <fieldset>
+            {% for choice in question.choice_set.all %}
+                <label class="choice-label" for="choice{{ choice.id }}">
+                    <input type="radio" name="question_{{ question.id }}" id="choice{{ choice.id }}" value="{{ choice.id }}">
+                    <div class="radio-custom"></div>
+                    <span class="choice-text">{{ choice.choice_text }}</span>
+                </label>
+            {% endfor %}
+        </fieldset>
+    </div>
+    {% endfor %}
+    
     <button type="submit" class="btn-submit">Oy Ver</button>
     </form>
 </div>

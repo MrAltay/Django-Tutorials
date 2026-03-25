@@ -16,28 +16,111 @@
     <h1 class="page-title">Anket Sistemi</h1>
 </div>
 
-<div class="info-box">
-    <p>Oyunuzu kullanmak için aşağıdan bir anket seçin. Sivas'ın geleceği için karar sizin.</p>
+<div class="info-box" style="margin-bottom: 2rem;">
+    <p>Oyunuzu kullanmak için aşağıdan bir anket seçin veya kendi anketinizi oluşturun. Sivas'ın geleceği için karar sizin.</p>
 </div>
 
-{% if latest_question_list %}
-<div class="card-grid">
-    {% for question in latest_question_list %}
-    {% cycle 'card-orange' 'card-red' 'card-green' 'card-blue' 'card-yellow' as card_color silent %}
-    <a href="{% url 'anketler:detail' question.id %}" class="anket-card {{ card_color }}">
-        <div class="icon">
-            {% if forloop.counter|divisibleby:4 %}🍲
-            {% elif forloop.counter|divisibleby:3 %}🏛️
-            {% elif forloop.counter|divisibleby:2 %}🐕
-            {% else %}🗳️{% endif %}
+<div class="index-layout">
+    <!-- Left Column: Create Poll Form -->
+    <div class="create-poll-section">
+        <div class="vote-form-container" style="background-color: var(--bg-card); padding: 1.5rem;">
+            <h2 class="vote-form-title" style="margin-bottom: 1.5rem; font-size: 1.25rem; font-weight: 500;">Yeni Anket Ekle</h2>
+            <form action="{% url 'anketler:create_poll' %}" method="post" id="create-poll-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="text" name="title" class="form-input" placeholder="Anket Başlığı" required>
+                </div>
+                
+                <div id="questions-container">
+                    <div class="question-block" data-qindex="0">
+                        <div class="form-group" style="margin-top: 1rem;">
+                            <input type="text" name="q_0_text" class="form-input question-input" placeholder="1. Soru" required>
+                        </div>
+                        <div class="choices-container" style="padding-left: 1rem; border-left: 2px solid var(--border-color); margin-bottom: 1rem;">
+                            <div class="form-group">
+                                <input type="text" name="q_0_c_0" class="form-input choice-input" placeholder="Seçenek 1" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="q_0_c_1" class="form-input choice-input" placeholder="Seçenek 2" required>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-text btn-add-choice" onclick="addChoice(0)">+ Seçenek Ekle</button>
+                    </div>
+                </div>
+                
+                <button type="button" class="btn-text btn-add-question" onclick="addQuestion()" style="margin-top: 1rem; display: block; width: 100%; text-align: left;">+ Soru Ekle</button>
+                
+                <button type="submit" class="btn-submit" style="margin-top: 2rem;">Anketi Oluştur</button>
+            </form>
         </div>
-        <span>{{ question.question_text }}</span>
-    </a>
-    {% endfor %}
+    </div>
+
+    <!-- Right Column: Existing Polls -->
+    <div class="polls-list-section">
+        {% if latest_poll_list %}
+        <div class="card-grid" style="margin-top: 0;">
+            {% for poll in latest_poll_list %}
+            {% cycle 'card-orange' 'card-red' 'card-green' 'card-blue' 'card-yellow' as card_color silent %}
+            <a href="{% url 'anketler:detail' poll.id %}" class="anket-card {{ card_color }}">
+                <div class="icon">
+                    {% if forloop.counter|divisibleby:4 %}🍲
+                    {% elif forloop.counter|divisibleby:3 %}🏛️
+                    {% elif forloop.counter|divisibleby:2 %}🐕
+                    {% else %}🗳️{% endif %}
+                </div>
+                <span>{{ poll.title }}</span>
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="info-box">
+            <p>Şu anda aktif bir anket bulunmamaktadır.</p>
+        </div>
+        {% endif %}
+    </div>
 </div>
-{% else %}
-<div class="info-box">
-    <p>Şu anda aktif bir anket bulunmamaktadır.</p>
-</div>
-{% endif %}
+
+<script>
+    let qCount = 1;
+    
+    function addChoice(qIndex) {
+        const questionBlock = document.querySelector(`.question-block[data-qindex="${qIndex}"]`);
+        const choicesContainer = questionBlock.querySelector('.choices-container');
+        const cCount = choicesContainer.querySelectorAll('.form-group').length;
+        
+        const newGroup = document.createElement('div');
+        newGroup.className = 'form-group';
+        newGroup.innerHTML = `<input type="text" name="q_${qIndex}_c_${cCount}" class="form-input choice-input" placeholder="Seçenek ${cCount + 1}" required>`;
+        
+        choicesContainer.appendChild(newGroup);
+    }
+    
+    function addQuestion() {
+        const container = document.getElementById('questions-container');
+        const currentQIndex = qCount;
+        
+        const newBlock = document.createElement('div');
+        newBlock.className = 'question-block';
+        newBlock.setAttribute('data-qindex', currentQIndex);
+        
+        newBlock.innerHTML = `
+            <hr style="border: 0; height: 1px; background: var(--border-color); margin: 1.5rem 0;">
+            <div class="form-group">
+                <input type="text" name="q_${currentQIndex}_text" class="form-input question-input" placeholder="${currentQIndex + 1}. Soru" required>
+            </div>
+            <div class="choices-container" style="padding-left: 1rem; border-left: 2px solid var(--border-color); margin-bottom: 1rem;">
+                <div class="form-group">
+                    <input type="text" name="q_${currentQIndex}_c_0" class="form-input choice-input" placeholder="Seçenek 1" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="q_${currentQIndex}_c_1" class="form-input choice-input" placeholder="Seçenek 2" required>
+                </div>
+            </div>
+            <button type="button" class="btn-text btn-add-choice" onclick="addChoice(${currentQIndex})">+ Seçenek Ekle</button>
+        `;
+        
+        container.appendChild(newBlock);
+        qCount++;
+    }
+</script>
 {% endblock %}

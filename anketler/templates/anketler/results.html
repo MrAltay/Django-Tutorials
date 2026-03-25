@@ -18,26 +18,31 @@
 </div>
 
 <div class="page-header">
-    <h1 style="font-size: 1.5rem;">{{ question.question_text }}</h1>
+    <h1 style="font-size: 1.5rem;">{{ poll.title }}</h1>
 </div>
 
 <div class="info-box">
-    <p>Oylar sayıldı. İşte ağdan gelen en son sonuçlar.</p>
+    <p>Oylar sayıldı. İşte anket sonuçları.</p>
 </div>
 
-<ul class="results-list">
-{% for choice in question.choice_set.all %}
-    <li class="result-item">
-        <div class="result-progress" style="width: {% widthratio choice.votes question.choice_set.count|default:1 100 %}%"></div>
-        <div class="result-content">
-            <span class="result-name">{{ choice.choice_text }}</span>
-            <span class="result-votes">{{ choice.votes }} oy</span>
-        </div>
-    </li>
+{% for question in poll.question_set.all %}
+<div style="margin-bottom: 2.5rem;">
+    <h2 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-color);">{{ question.question_text }}</h2>
+    <ul class="results-list">
+    {% for choice in question.choice_set.all %}
+        <li class="result-item">
+            <div class="result-progress" style="width: {% widthratio choice.votes question.choice_set.count|default:1 100 %}%"></div>
+            <div class="result-content">
+                <span class="result-name">{{ choice.choice_text }}</span>
+                <span class="result-votes">{{ choice.votes }} oy</span>
+            </div>
+        </li>
+    {% endfor %}
+    </ul>
+</div>
 {% endfor %}
-</ul>
 
 <div style="margin-top: 2rem; text-align: center;">
-    <a href="{% url 'anketler:detail' question.id %}" class="btn-submit" style="display: inline-block; width: auto; padding: 0.75rem 2rem;">Tekrar Oy Ver</a>
+    <a href="{% url 'anketler:detail' poll.id %}" class="btn-submit" style="display: inline-block; width: auto; padding: 0.75rem 2rem;">Tekrar Oy Ver</a>
 </div>
 {% endblock %}
